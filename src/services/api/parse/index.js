@@ -1,1 +1,0 @@
-export {parseContactsList} from './contacts'
