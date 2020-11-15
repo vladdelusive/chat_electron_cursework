@@ -24,12 +24,18 @@ export const getAuthIsAuthenticated = createSelector(
     (auth) => auth.isAuthenticated
 );
 
-export const getAuthIsLoggingIn = createSelector(
-    [getAuth],
-    (auth) => auth.isLoggingIn
-);
 
 export const getAuthProfile = createSelector(
     [getAuth],
     (auth) => auth.profile
+);
+
+export const getAuthProfileUid = createSelector(
+    [getAuthProfile],
+    (profile) => profile.uid
+);
+
+export const getAuthProfileChats = createSelector(
+    [getAuthProfile],
+    (profile) => profile.chats
 );
