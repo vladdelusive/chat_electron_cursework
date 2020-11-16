@@ -25,4 +25,20 @@ export const chatsReducer = createReducer(initialState, {
         };
     },
 
+    [chats.FETCH_USERS_FOR_CHAT](state) {
+        return {
+            ...state,
+            isLoadingUsersChats: true
+        };
+    },
+
+    [chats.SAVE_USERS_FOR_CHAT](state, action) {
+        const { payload } = action
+        return {
+            ...state,
+            usersChats: payload,
+            isLoadingUsersChats: false,
+        };
+    },
+
 });
