@@ -5,8 +5,6 @@ import { ConnectedRouter as ConnectedRouterProvider } from 'connected-react-rout
 import { Root } from 'components';
 import { history } from 'routes/history';
 import { store } from 'store';
-import { restoreAuth } from 'store/restore-auth';
-import { IS_DEVELOPMENT } from 'constants/env';
 
 const root = document.getElementById('root');
 const render = (Component, root, done = () => { }) => {
@@ -21,14 +19,4 @@ const render = (Component, root, done = () => { }) => {
 	);
 };
 
-restoreAuth()
 render(Root, root);
-window.addEventListener('storage', (e) => {
-	if (e.key === 'auth') {
-		restoreAuth();
-		if (IS_DEVELOPMENT !== 'production') {
-			const currentTime = new Date().toLocaleTimeString();
-			console.log(`[Storage/Auth] at ${currentTime}\n ${window.localStorage.getItem('auth')}`);
-		}
-	}
-});
