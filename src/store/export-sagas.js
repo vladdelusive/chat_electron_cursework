@@ -1,2 +1,4 @@
 export { authSaga } from './auth'
-export { contactsSaga } from './contacts'
+export { profilesSaga } from './profiles'
+export { chatsSaga } from './chats'
+export { notificationSaga } from './notifications'
