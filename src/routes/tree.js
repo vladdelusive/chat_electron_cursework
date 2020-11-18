@@ -1,9 +1,9 @@
 import {
 	PageHome,
 	PageProfile,
-	PageContacts,
 	NotFound,
-	PageContact,
+	PageChats,
+	PageProfiles,
 } from 'pages';
 
 const routes = {
@@ -27,24 +27,24 @@ const routes = {
 		exact: true,
 		isNeedAuth: true,
 	},
-	'contacts': {
-		path: '/contacts',
-		page: PageContacts,
-		name: 'contacts',
+	'chats': {
+		path: '/chats',
+		page: PageChats,
+		name: 'chats',
 		link() {
 			return this.path;
 		},
 		exact: true,
-		isNeedAuth: true,
+		// isNeedAuth: true,
 	},
-	'contacts-profile': {
-		path: '/contacts/:id',
-		page: PageContact,
-		name: 'contact-profile',
+	'profiles': {
+		path: '/profile/:id',
+		page: PageProfiles,
+		name: 'profiles',
 		link(id) {
 			return this.path.replace(":id", id);
 		},
-		isNeedAuth: true,
+		// isNeedAuth: true,
 	},
 	'not-found': {
 		path: "*",
