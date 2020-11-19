@@ -9,12 +9,6 @@ function PageProfileContainer(props) {
         img,
         name,
         email,
-        number,
-        age,
-        country,
-        nat,
-        locationPlace,
-        isDataExist,
     } = props
 
     return (
@@ -22,13 +16,8 @@ function PageProfileContainer(props) {
             img={img}
             nameTitle={name}
             email={email}
-            age={age}
-            country={country}
-            street={locationPlace}
-            nat={nat}
-            number={number}
             title={"Profile"}
-            isDataExist={isDataExist}
+            isDataExist={true}
         />
     )
 }
@@ -36,15 +25,9 @@ function PageProfileContainer(props) {
 const mapStateToProps = (state) => {
     const profile = getAuthProfile(state)
     return {
-        img: profile.picture["large"],
-        name: profile.fullName,
+        img: profile.photo,
+        name: profile.name,
         email: profile.email,
-        number: profile.cell,
-        age: profile.dob.age,
-        country: profile.country,
-        locationPlace: profile.locationPlace,
-        nat: profile.nat,
-        isDataExist: profile || false
     };
 };
 
