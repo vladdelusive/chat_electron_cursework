@@ -83,6 +83,64 @@ function Chats(props) {
                         </Row>
                     </div>
                 </div>
+                <Layout className="chats-list">
+                    <Sider
+                        width={300}
+                        theme={'light'}
+                        collapsible={true}
+                        collapsed={isCollapsed}
+                        onCollapse={() => setIsCollapsed(!isCollapsed)}
+                    >
+                        <Menu mode="inline" selectedKeys={[activeChatId]}>
+                            {filteredChats.map((chat) => {
+                                const { userInfo, id } = chat;
+                                const { name, photo } = userInfo;
+                                return (
+                                    <Menu.Item
+                                        key={id}
+                                        onClick={() => setActiveChatId(id)}
+                                        icon={<Icon component={() => (<img src={photo} alt="logo" />)} />}>
+                                        {name}
+                                    </Menu.Item>
+                                )
+                            }
+                            )}
+                        </Menu>
+                    </Sider>
+                    <Layout className="chat-content">
+                        <Content>
+                            <div className="messages-container">
+                                <div className="scroll-block">
+                                    {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
+                                    { message: "Ну привет чумаход, я норм", me: false, time: "19:16", id: 123 },
+                                    { message: "Прикол прикольный", me: true, time: "19:16", id: 3 },
+                                    { message: "Прикольный прикол", me: true, time: "19:16", id: 2 },
+                                    { message: "Да уж ну и диалог", me: false, time: "19:16", id: 24 },
+                                    { message: "Не ну а чО", me: true, time: "19:16", id: 25 },
+                                    { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }].map((item) => {
+                                        return <MessageCard key={item.id} item={item} />
+                                    })}
+                                </div>
+                            </div>
+                            <div className="input-container">
+                                <Row className="input-message" typeof="flex" justify="center" gutter={24} >
+                                    <Col style={{ alignItems: "center", display: "flex", cursor: "pointer" }}>
+                                        <PaperClipOutlined style={{ fontSize: 30 }} />
+                                    </Col>
+                                    <Col span={22}>
+                                        <Input
+                                            className="input"
+                                            placeholder="input search text"
+                                            size="large"
+                                        // suffix={suffix}
+                                        // onSearch={onSearch}
+                                        />
+                                    </Col>
+                                </Row>
+                            </div>
+                        </Content>
+                    </Layout>
+                </Layout>
             </div>
             {
                 isShowNewChatModal
