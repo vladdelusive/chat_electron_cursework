@@ -1,0 +1,38 @@
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .scroll-block {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        padding: 20px;
+    }
+    .message {
+        margin: 5px;
+        max-width: 70%;
+    }
+
+    .from-me--message {
+        background: white;
+        border-radius: 5px;
+        padding: 6px;
+        font-size: 14px;
+        font-family: cursive;
+        display: flex;
+        align-self: flex-end;
+    }
+    .to-me--message {
+        background: white;
+        border-radius: 5px;
+        padding: 6px;
+        font-size: 14px;
+        font-family: cursive;
+        display: flex;
+        align-self: flex-start;
+    }
+
+    .from-me--message ~ .from-me--message {
+        margin-top: 0px;
+    }
+}
