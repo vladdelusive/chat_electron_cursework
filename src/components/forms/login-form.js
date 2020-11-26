@@ -8,7 +8,6 @@ import { checkForm } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
 import { loginRequest } from 'store/auth/actions'
-import { getAuthIsLoggingIn } from 'store/auth/selectors';
 
 function LoginForm(props) {
     const {
@@ -78,6 +77,18 @@ function LoginForm(props) {
                     </Button>
                 </Col>
             </Row>
+            <Row style={{ marginTop: 20 }} typeof="flex" justify="center">
+                <Col>
+                    <Button
+                        className={'control'}
+                        type={'text'}
+                        size="small"
+                        onClick={() => { }}
+                    >
+                        I don`t have an account
+                    </Button>
+                </Col>
+            </Row>
         </div>
     </Form>
 }
@@ -91,7 +102,6 @@ const validate = (values) => {
 
 const mapStateToProps = (state) => {
     return {
-        pending: getAuthIsLoggingIn(state),
     }
 };
 
