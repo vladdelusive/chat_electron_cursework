@@ -13,6 +13,7 @@ function ProfileContainer(props) {
     const {
         name,
         img,
+        // email,
         clearAuth,
         push
     } = props;
@@ -22,7 +23,7 @@ function ProfileContainer(props) {
         push(routes.home.link())
     }
 
-    const welcomeTitle = `Hello! ${name}`
+    const welcomeTitle = `${name}`
     const menu = (
         <Menu>
             <Menu.Item key="0" onClick={() => push(routes.profile.link())} ><UserOutlined />Profile</Menu.Item>
@@ -50,9 +51,9 @@ function ProfileContainer(props) {
 const mapStateToProps = (state) => {
     const profile = getAuthProfile(state)
     return {
-        img: profile.picture["medium"],
-        // gender: profile.gender,
-        name: profile.fullName,
+        img: profile.photo,
+        name: profile.name,
+        email: profile.email,
     };
 };
 
