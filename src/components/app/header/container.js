@@ -1,21 +1,19 @@
 import './style.scss';
 import { compose } from 'redux';
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { View } from './view';
 import { getAuthIsAuthenticated } from 'store/auth/selectors';
-import { LoginForm } from 'components/forms';
+import { fetchLogInByGoogle } from 'store/auth/actions';
 import { NavBar } from '../navbar';
 import { Col, Row } from 'antd';
 import { Logo } from '../logo';
-import Modal from 'antd/lib/modal/Modal';
 import { Profile } from '../profile';
 
 const HeaderContainer = (props) => {
-	const { isAuth } = props;
-	const [showModal, setShowModal] = useState(false)
+	const { isAuth, fetchLogInByGoogle } = props;
 
-	const correctNavbar = isAuth ? <Profile /> : <View setShowModal={setShowModal} />
+	const correctNavbar = isAuth ? <Profile /> : <View logInByGoogle={fetchLogInByGoogle} />
 
 	return <div className={'header'}>
 		<Row type={'flex'} gutter={36} align={'middle'}>
@@ -31,17 +29,6 @@ const HeaderContainer = (props) => {
 				</Row>
 			</Col>
 		</Row>
-		{!isAuth ? <Modal
-			title="Sign In"
-			visible={showModal}
-			onOk={() => setShowModal(false)}
-			onCancel={() => setShowModal(false)}
-			centered
-			footer={null}
-			closable={false}
-		>
-			<LoginForm setShowModal={setShowModal} />
-		</Modal> : null}
 	</div>
 }
 
@@ -52,7 +39,9 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const mapDispatchToProps = null;
+const mapDispatchToProps = {
+	fetchLogInByGoogle,
+};
 
 const Header = compose(
 	connect(mapStateToProps, mapDispatchToProps),
