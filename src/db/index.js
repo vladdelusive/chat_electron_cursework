@@ -12,4 +12,6 @@ const config = {
     measurementId: "G-YJ0E1D34G2"
 };
 
+export const { Timestamp } = firebase.firestore
+
 export const db = firebase.initializeApp(config).firestore();

@@ -2,9 +2,9 @@ import React from 'react'
 
 export function MessageCard(props) {
     const { item } = props;
-    const { 
-        message, 
-        me, 
+    const {
+        message,
+        me,
         // time, 
         // id,
     } = item;

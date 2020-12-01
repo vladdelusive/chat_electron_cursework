@@ -1,1 +1,1 @@
-export {parseContactsList} from './contacts'
+export { parseChatsList } from './chats'

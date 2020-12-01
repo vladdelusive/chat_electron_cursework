@@ -4,6 +4,7 @@ import { db } from 'db'
 import firebase from 'firebase'
 import 'firebase'
 import { noty } from 'utils/noty'
+import { parseChatsList } from '../parse'
 
 const createUserProfile = (profile) => db.collection("profiles").doc(profile.uid).set(profile)
 
@@ -17,7 +18,6 @@ export const auth = {
 	},
 
 	preparedUpdatedProfileData: async (profile) => {
-		
 		const chatsWithRefs = await Promise.all(profile.chats.map(e => db.doc(`chats/${e}`).get()))
 		const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
 
@@ -33,7 +33,7 @@ export const auth = {
 			return [...acc, { userInfo: { name: userValues.name, photo: userValues.photo, email: userValues.email, uid: userValues.uid }, id: chatId, ...chat }]
 		}, [])
 
-		return { profile: profile, chats: preparedChats }
+		return { profile: profile, chats: parseChatsList(preparedChats, profile.uid) }
 	},
 
 	googleLogin: () => {
@@ -49,23 +49,8 @@ export const auth = {
 				return { profile, chats: [] }
 			} else {
 				const existedProfile = (await db.doc(`profiles/${profile.uid}`).get()).data()
-
-				const chatsWithRefs = await Promise.all(existedProfile.chats.map(e => db.doc(`chats/${e}`).get()))
-				const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
-
-				const usersInfoRefs = await Promise.all(chats.map(({ users }) => {
-					const chatWithPersonUid = users.find(el => existedProfile.uid !== el)
-					return db.doc(`profiles/${chatWithPersonUid}`).get()
-				}))
-				const usersInfo = await Promise.all(usersInfoRefs.map(e => e.data()))
-
-				const preparedChats = chats.reduce((acc, chat, index) => {
-					const userValues = usersInfo[index];
-					const chatId = existedProfile.chats[index];
-					return [...acc, { userInfo: { name: userValues.name, photo: userValues.photo, email: userValues.email, uid: userValues.uid }, id: chatId, ...chat }]
-				}, [])
-
-				return { profile: existedProfile, chats: preparedChats }
+				const data = await auth.preparedUpdatedProfileData(existedProfile)
+				return data
 			}
 		}).catch((error) => {
 			if (error.message) {

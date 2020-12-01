@@ -129,14 +129,15 @@ function Chats(props) {
                                 {activeChatId
                                     ?
                                     <div className="scroll-block">
-                                        {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
+                                        {/* {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
                                         { message: "Ну привет чумаход, я норм", me: false, time: "19:16", id: 123 },
                                         { message: "Прикол прикольный", me: true, time: "19:16", id: 3 },
                                         { message: "Прикольный прикол", me: true, time: "19:16", id: 2 },
                                         { message: "Да уж ну и диалог", me: false, time: "19:16", id: 24 },
                                         { message: "Не ну а чО", me: true, time: "19:16", id: 25 },
-                                        { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }].map((item) => {
-                                            return <MessageCard key={item.id} item={item} />
+                                        { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }] */}
+                                        {activeChat.messages.map((item, index) => {
+                                            return <MessageCard key={index} item={item} />
                                         })}
                                     </div>
                                     : null}
