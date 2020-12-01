@@ -17,6 +17,14 @@ export const authReducer = createReducer(initialState, {
         };
     },
 
+    [auth.SAVE_UPDATE_PROFILE](state, action) {
+        const { payload } = action;
+        return {
+            ...state,
+            profile: payload,
+        };
+    },
+
     [auth.FAIL_LOGIN_BY_GOOGLE](state) {
         return {
             ...state,

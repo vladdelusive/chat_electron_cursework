@@ -8,13 +8,16 @@ import { getChatsList } from './selectors';
 function* createNewChatSaga(action) {
     try {
         const { payload } = action;
+        const { chatWithUserUid, callback} = payload;
         const userUid = yield select(getAuthProfileUid)
         const chat = {
             messages: [],
-            users: [userUid, payload]
+            users: [userUid, chatWithUserUid]
         }
-        const response = yield call(api.chats.createNewChat, chat);
-        debugger
+        yield call(api.chats.createNewChat, chat);
+        if(typeof callback === "function") {
+            callback()
+        }
     } catch (error) {
         console.warn(error);
     }
@@ -27,7 +30,7 @@ function* fetchUsersForChatSaga() {
         const userUid = yield select(getAuthProfileUid)
         const userChats = yield select(getChatsList)
         const profiles = response.filter(profile => profile.id !== userUid && !userChats.find(chat => chat.userInfo.uid === profile.id))
-        debugger
+        // debugger
         yield put(saveUsersForChat(profiles))
     } catch (error) {
         console.warn(error);
