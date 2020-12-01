@@ -9,9 +9,11 @@ Icon,
 } from '@ant-design/icons';
 import { MessageCard } from 'components/cards/message'
 import { setActiveChatId } from 'store/chats/actions';
+import { setUpdateProfile } from 'store/auth/actions';
 import { getActiveChatId, getChatsList } from 'store/chats/selectors';
 import { getAuthProfile } from 'store/auth/selectors';
 import { SearchChatModal } from 'components/modals';
+import { api } from 'services';
 const { Content, Sider } = Layout;
 const { Search } = Input;
 const { Title } = Typography;
@@ -24,11 +26,25 @@ function Chats(props) {
         isSetActiveChat,
         activeChat,
         profile,
+        setUpdateProfile,
+        profileUid,
     } = props;
 
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [isShowNewChatModal, setIsShowNewChatModal] = useState(false)
+
+    useEffect(() => {
+        let unsubscribe;
+        if (profileUid) {
+            unsubscribe = api.auth.subscribeToProfileChats(profileUid, setUpdateProfile)
+        }
+        return () => {
+            if (typeof unsubscribe === "function") {
+                unsubscribe()
+            }
+        }
+    }, [profileUid, setUpdateProfile])
 
     const filteredChats = (searchValue?.toString().trim().length && chats.filter(({ userInfo }) => {
         return userInfo.name?.toString().toLowerCase().trim().includes(searchValue.toString().toLowerCase().trim())
@@ -110,19 +126,22 @@ function Chats(props) {
                     <Layout className="chat-content">
                         <Content>
                             <div className="messages-container">
-                                <div className="scroll-block">
-                                    {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
-                                    { message: "Ну привет чумаход, я норм", me: false, time: "19:16", id: 123 },
-                                    { message: "Прикол прикольный", me: true, time: "19:16", id: 3 },
-                                    { message: "Прикольный прикол", me: true, time: "19:16", id: 2 },
-                                    { message: "Да уж ну и диалог", me: false, time: "19:16", id: 24 },
-                                    { message: "Не ну а чО", me: true, time: "19:16", id: 25 },
-                                    { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }].map((item) => {
-                                        return <MessageCard key={item.id} item={item} />
-                                    })}
-                                </div>
+                                {activeChatId
+                                    ?
+                                    <div className="scroll-block">
+                                        {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
+                                        { message: "Ну привет чумаход, я норм", me: false, time: "19:16", id: 123 },
+                                        { message: "Прикол прикольный", me: true, time: "19:16", id: 3 },
+                                        { message: "Прикольный прикол", me: true, time: "19:16", id: 2 },
+                                        { message: "Да уж ну и диалог", me: false, time: "19:16", id: 24 },
+                                        { message: "Не ну а чО", me: true, time: "19:16", id: 25 },
+                                        { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }].map((item) => {
+                                            return <MessageCard key={item.id} item={item} />
+                                        })}
+                                    </div>
+                                    : null}
                             </div>
-                            <div className="input-container">
+                            {activeChatId ? <div className="input-container">
                                 <Row className="input-message" typeof="flex" justify="center" gutter={24} >
                                     <Col style={{ alignItems: "center", display: "flex", cursor: "pointer" }}>
                                         <PaperClipOutlined style={{ fontSize: 30 }} />
@@ -137,7 +156,7 @@ function Chats(props) {
                                         />
                                     </Col>
                                 </Row>
-                            </div>
+                            </div> : null}
                         </Content>
                     </Layout>
                 </Layout>
@@ -156,17 +175,19 @@ const mapStateToProps = (state) => {
     const activeChatId = getActiveChatId(state)
     const chats = getChatsList(state);
     const activeChat = activeChatId && chats?.length ? chats.find(chat => chat.id === activeChatId) : null;
+    const profile = getAuthProfile(state)
     return {
         chats,
         isSetActiveChat: !!activeChat,
         activeChat,
         activeChatId,
-        profile: getAuthProfile(state),
+        profile,
+        profileUid: profile && profile.uid ? profile.uid : null,
     };
 };
 
 const mapDispatchToProps = {
-    setActiveChatId,
+    setActiveChatId, setUpdateProfile,
 };
 
 const PageChats = compose(

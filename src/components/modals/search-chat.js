@@ -22,14 +22,16 @@ function SearchChatModal(props) {
         fetchUsersForChat()
     }, [fetchUsersForChat])
 
+    const clodeModal = () => {
+        setTimeout(() => setIsShowNewChatModal(false), 200)
+        setIsShow(false)
+    }
+
     return (
         <Modal
             visible={isShow}
             title="Search chat with new person"
-            onCancel={() => {
-                setTimeout(() => setIsShowNewChatModal(false), 200)
-                setIsShow(false)
-            }}
+            onCancel={clodeModal}
         >
             <Row typeof="flex" justify="center" style={{ marginBottom: 10 }} >
                 <Col span={24}>
@@ -54,7 +56,7 @@ function SearchChatModal(props) {
                         actions={[
                             <Button
                                 size="small"
-                                onClick={() => createNewChat(item.uid)}
+                                onClick={() => createNewChat({ chatWithUserUid: item.uid, callback: clodeModal })}
                             >Start chat</Button>
                         ]}
                     >

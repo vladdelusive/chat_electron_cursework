@@ -8,9 +8,33 @@ import { noty } from 'utils/noty'
 const createUserProfile = (profile) => db.collection("profiles").doc(profile.uid).set(profile)
 
 export const auth = {
-	// login: (payload) => http.get('/api', { params: { seed: payload, results: 1 } }).then((response) => {
-	// 	return response ? parseContactsList(response) : null;
-	// }),
+
+	subscribeToProfileChats: (uid, onSubsribe) => {
+		return db
+			.collection('profiles')
+			.doc(uid)
+			.onSnapshot(snapshot => onSubsribe(snapshot.data()))
+	},
+
+	preparedUpdatedProfileData: async (profile) => {
+		
+		const chatsWithRefs = await Promise.all(profile.chats.map(e => db.doc(`chats/${e}`).get()))
+		const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
+
+		const usersInfoRefs = await Promise.all(chats.map(({ users }) => {
+			const chatWithPersonUid = users.find(el => profile.uid !== el)
+			return db.doc(`profiles/${chatWithPersonUid}`).get()
+		}))
+		const usersInfo = await Promise.all(usersInfoRefs.map(e => e.data()))
+
+		const preparedChats = chats.reduce((acc, chat, index) => {
+			const userValues = usersInfo[index];
+			const chatId = profile.chats[index];
+			return [...acc, { userInfo: { name: userValues.name, photo: userValues.photo, email: userValues.email, uid: userValues.uid }, id: chatId, ...chat }]
+		}, [])
+
+		return { profile: profile, chats: preparedChats }
+	},
 
 	googleLogin: () => {
 		const provider = new firebase.auth.GoogleAuthProvider();
