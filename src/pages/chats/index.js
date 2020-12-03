@@ -8,7 +8,7 @@ Icon,
     PaperClipOutlined, PlusOutlined, UserOutlined,
 } from '@ant-design/icons';
 import { MessageCard } from 'components/cards/message'
-import { setActiveChatId } from 'store/chats/actions';
+import { setActiveChatId, setUpdatedChatMessages } from 'store/chats/actions';
 import { setUpdateProfile } from 'store/auth/actions';
 import { getActiveChatId, getChatsList } from 'store/chats/selectors';
 import { getAuthProfile } from 'store/auth/selectors';
@@ -28,6 +28,8 @@ function Chats(props) {
         profile,
         setUpdateProfile,
         profileUid,
+        profileChats,
+        setUpdatedChatMessages,
     } = props;
 
     const [isCollapsed, setIsCollapsed] = useState(false)
@@ -35,16 +37,28 @@ function Chats(props) {
     const [isShowNewChatModal, setIsShowNewChatModal] = useState(false)
 
     useEffect(() => {
-        let unsubscribe;
+        let unsubscribeToProfileChats;
         if (profileUid) {
-            unsubscribe = api.auth.subscribeToProfileChats(profileUid, setUpdateProfile)
+            unsubscribeToProfileChats = api.auth.subscribeToProfileChats(profileUid, setUpdateProfile)
         }
         return () => {
-            if (typeof unsubscribe === "function") {
-                unsubscribe()
+            if (typeof unsubscribeToProfileChats === "function" && profileUid) {
+                unsubscribeToProfileChats()
             }
         }
     }, [profileUid, setUpdateProfile])
+
+    useEffect(() => {
+        let unsubscribeChatsMessagesArray;
+        if (profileChats) {
+            unsubscribeChatsMessagesArray = profileChats.map(chat => api.auth.subscribeToChatsMessages(chat, setUpdatedChatMessages))
+        }
+        return () => {
+            if (typeof unsubscribeChatsMessagesArray === "object" && profileChats) {
+                unsubscribeChatsMessagesArray.forEach(unsub => unsub())
+            }
+        }
+    }, [profileChats, setUpdatedChatMessages])
 
     const filteredChats = (searchValue?.toString().trim().length && chats.filter(({ userInfo }) => {
         return userInfo.name?.toString().toLowerCase().trim().includes(searchValue.toString().toLowerCase().trim())
@@ -184,11 +198,12 @@ const mapStateToProps = (state) => {
         activeChatId,
         profile,
         profileUid: profile && profile.uid ? profile.uid : null,
+        profileChats: profile && profile.chats?.length ? profile.chats : null,
     };
 };
 
 const mapDispatchToProps = {
-    setActiveChatId, setUpdateProfile,
+    setActiveChatId, setUpdateProfile, setUpdatedChatMessages
 };
 
 const PageChats = compose(

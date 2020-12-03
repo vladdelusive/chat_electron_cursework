@@ -8,14 +8,14 @@ import { getChatsList } from './selectors';
 function* createNewChatSaga(action) {
     try {
         const { payload } = action;
-        const { chatWithUserUid, callback} = payload;
+        const { chatWithUserUid, callback } = payload;
         const userUid = yield select(getAuthProfileUid)
         const chat = {
             messages: [],
             users: [userUid, chatWithUserUid]
         }
         yield call(api.chats.createNewChat, chat);
-        if(typeof callback === "function") {
+        if (typeof callback === "function") {
             callback()
         }
     } catch (error) {
@@ -37,7 +37,19 @@ function* fetchUsersForChatSaga() {
     }
 }
 
+function* setUpdateChatMessageSaga(action) {
+    try {
+        const { payload } = action;
+        const { chatUid, data } = payload;
+        debugger
+        yield console.log("")
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export function* chatsSaga() {
     yield takeEvery(chats.CREATE_NEW_CHAT, createNewChatSaga);
     yield takeEvery(chats.FETCH_USERS_FOR_CHAT, fetchUsersForChatSaga);
+    yield takeEvery(chats.SET_UPDATED_CHAT_MESSAGES, setUpdateChatMessageSaga);
 }

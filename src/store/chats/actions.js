@@ -9,5 +9,7 @@ export const setActiveChatId = (payload) => ({ type: chats.SET_ACTIVE_CHAT_ID, p
 export const fetchUsersForChat = () => ({ type: chats.FETCH_USERS_FOR_CHAT });
 export const saveUsersForChat = (payload) => ({ type: chats.SAVE_USERS_FOR_CHAT, payload });
 
+export const setUpdatedChatMessages = (payload) => ({ type: chats.SET_UPDATED_CHAT_MESSAGES, payload });
+
 
 

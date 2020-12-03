@@ -17,12 +17,19 @@ export const auth = {
 			.onSnapshot(snapshot => onSubsribe(snapshot.data()))
 	},
 
+	subscribeToChatsMessages: (chatUid, onSubsribe) => {
+		return db
+			.collection('chats')
+			.doc(chatUid)
+			.onSnapshot(snapshot => onSubsribe({ chatUid, data: snapshot.data() }))
+	},
+
 	preparedUpdatedProfileData: async (profile) => {
-		const chatsWithRefs = await Promise.all(profile.chats.map(e => db.doc(`chats/${e}`).get()))
+		const chatsWithRefs = await Promise.all(profile.chats.map(chatUid => db.doc(`chats/${chatUid}`).get()))
 		const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
 
 		const usersInfoRefs = await Promise.all(chats.map(({ users }) => {
-			const chatWithPersonUid = users.find(el => profile.uid !== el)
+			const chatWithPersonUid = users.find(userUid => profile.uid !== userUid)
 			return db.doc(`profiles/${chatWithPersonUid}`).get()
 		}))
 		const usersInfo = await Promise.all(usersInfoRefs.map(e => e.data()))
