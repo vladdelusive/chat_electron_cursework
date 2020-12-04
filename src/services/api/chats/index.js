@@ -22,4 +22,10 @@ export const chats = {
             })
         })
     },
+    sendMessage: async (payload) => {
+        const { chatUid, message } = payload;
+        return db.collection(`chats`).doc(chatUid).update({
+            messages: firebase.firestore.FieldValue.arrayUnion(message)
+        })
+    },
 };

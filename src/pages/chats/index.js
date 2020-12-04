@@ -8,7 +8,7 @@ Icon,
     PaperClipOutlined, PlusOutlined, UserOutlined,
 } from '@ant-design/icons';
 import { MessageCard } from 'components/cards/message'
-import { setActiveChatId, setUpdatedChatMessages } from 'store/chats/actions';
+import { setActiveChatId, setUpdatedChatMessages, sendNewMessage } from 'store/chats/actions';
 import { setUpdateProfile } from 'store/auth/actions';
 import { getActiveChatId, getChatsList } from 'store/chats/selectors';
 import { getAuthProfile } from 'store/auth/selectors';
@@ -30,11 +30,17 @@ function Chats(props) {
         profileUid,
         profileChats,
         setUpdatedChatMessages,
+        sendNewMessage,
     } = props;
 
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [isShowNewChatModal, setIsShowNewChatModal] = useState(false)
+    const [messageValue, setMessageValue] = useState("")
+
+    useEffect(() => {
+        setMessageValue("")
+    }, [activeChatId])
 
     useEffect(() => {
         let unsubscribeToProfileChats;
@@ -67,6 +73,13 @@ function Chats(props) {
     useEffect(() => {
         return () => setActiveChatId(null)
     }, [setActiveChatId])
+
+    const submitMessage = (e) => {
+        if (e.key === "Enter") {
+            sendNewMessage({ chatUid: activeChatId, message: messageValue })
+            setMessageValue("")
+        }
+    }
 
     return (
         <>
@@ -166,6 +179,9 @@ function Chats(props) {
                                             className="input"
                                             placeholder="input search text"
                                             size="large"
+                                            onChange={(e) => setMessageValue(e.target.value)}
+                                            value={messageValue}
+                                            onKeyPress={submitMessage}
                                         // suffix={suffix}
                                         // onSearch={onSearch}
                                         />
@@ -203,7 +219,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    setActiveChatId, setUpdateProfile, setUpdatedChatMessages
+    setActiveChatId, setUpdateProfile, setUpdatedChatMessages, sendNewMessage
 };
 
 const PageChats = compose(

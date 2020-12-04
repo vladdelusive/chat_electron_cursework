@@ -11,5 +11,7 @@ export const saveUsersForChat = (payload) => ({ type: chats.SAVE_USERS_FOR_CHAT,
 
 export const setUpdatedChatMessages = (payload) => ({ type: chats.SET_UPDATED_CHAT_MESSAGES, payload });
 
+export const sendNewMessage = (payload) => ({ type: chats.SEND_MESSAGE, payload });
+
 
 

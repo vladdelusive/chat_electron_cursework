@@ -4,6 +4,7 @@ import { api } from 'services';
 import { saveChats, saveUsersForChat } from './actions';
 import { getAuthProfileUid } from 'store/auth/selectors';
 import { getChatsList } from './selectors';
+import { parseChatsList, parseNewMessage } from 'services/api/parse';
 
 function* createNewChatSaga(action) {
     try {
@@ -46,7 +47,20 @@ function* setUpdateChatMessageSaga(action) {
             if (chat.id === chatUid) return { ...chat, messages: data.messages }
             return chat
         })
-        yield put(saveChats(updatedChats))
+        const userUid = yield select(getAuthProfileUid)
+        yield put(saveChats(parseChatsList(updatedChats, userUid)))
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function* sendMessageSaga(action) {
+    try {
+        const { payload } = action;
+        const { chatUid, message } = payload
+        const profileUid = yield select(getAuthProfileUid)
+        const preparedNewMessage = parseNewMessage({ uid: profileUid, message })
+        yield call(api.chats.sendMessage, { chatUid, message: preparedNewMessage })
     } catch (error) {
         console.log(error);
     }
@@ -56,4 +70,5 @@ export function* chatsSaga() {
     yield takeEvery(chats.CREATE_NEW_CHAT, createNewChatSaga);
     yield takeEvery(chats.FETCH_USERS_FOR_CHAT, fetchUsersForChatSaga);
     yield takeEvery(chats.SET_UPDATED_CHAT_MESSAGES, setUpdateChatMessageSaga);
+    yield takeEvery(chats.SEND_MESSAGE, sendMessageSaga);
 }
