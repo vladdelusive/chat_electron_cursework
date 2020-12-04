@@ -2,15 +2,18 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    .scroll-block {
+    .simplebar-content {
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
-        padding: 20px;
+        padding: 10px !important;
     }
     .message {
         margin: 5px;
         max-width: 70%;
+        min-width: 40px;
+        &__content {
+            overflow: hidden;
+        }
     }
 
     .from-me--message {
@@ -33,6 +36,9 @@
     }
 
     .from-me--message ~ .from-me--message {
+        margin-top: 0px;
+    }
+    .to-me--message ~ .to-me--message {
         margin-top: 0px;
     }
 }

@@ -9,7 +9,7 @@ export function MessageCard(props) {
         // id,
     } = item;
     return (
-        <div className={`message ${me ? "from-me--message" : "to-me--message"}`}>
+        <div className={`message ${me ? "from-me--message" : "to-me--message"}`} style={{ opacity: message?.length === 0 ? 0 : 1 }}>
             <div className="message__content">
                 {message}
             </div>

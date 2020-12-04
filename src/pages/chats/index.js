@@ -14,6 +14,11 @@ import { getActiveChatId, getChatsList } from 'store/chats/selectors';
 import { getAuthProfile } from 'store/auth/selectors';
 import { SearchChatModal } from 'components/modals';
 import { api } from 'services';
+import { Link } from 'react-router-dom';
+import { routes } from 'routes';
+
+import { Scrollbars } from 'react-custom-scrollbars';
+
 const { Content, Sider } = Layout;
 const { Search } = Input;
 const { Title } = Typography;
@@ -75,11 +80,33 @@ function Chats(props) {
     }, [setActiveChatId])
 
     const submitMessage = (e) => {
+        if (!messageValue.trim()) {
+            return;
+        }
         if (e.key === "Enter") {
             sendNewMessage({ chatUid: activeChatId, message: messageValue })
             setMessageValue("")
         }
     }
+
+    useEffect(() => {
+        const scrollBlockContainer = document.querySelector(".simplebar-content")
+        if (scrollBlockContainer) {
+            scrollBlockContainer.scrollTo({
+                top: scrollBlockContainer.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+    }, [chats])
+
+    useEffect(() => {
+        const scrollBlockContainer = document.querySelector(".simplebar-content")
+        if (scrollBlockContainer) {
+            scrollBlockContainer.scrollTo({
+                top: 2439,
+            });
+        }
+    }, [activeChatId])
 
     return (
         <>
@@ -118,7 +145,11 @@ function Chats(props) {
                                     </Col>
                                     <Col>
                                         <Title level={3}>
-                                            {isSetActiveChat && activeChat?.userInfo?.name ? activeChat.userInfo.name : profile?.name || "Владислав Товсточуб"}
+                                            {isSetActiveChat && activeChat?.userInfo?.name ?
+                                                <Link to={routes["profiles"].link(activeChat.userInfo.uid)} style={{ color: "#2335a0" }}>
+                                                    {activeChat.userInfo.name}
+                                                </Link>
+                                                : profile?.name || "Владислав Товсточуб"}
                                         </Title>
                                     </Col>
                                 </Row>
@@ -155,18 +186,13 @@ function Chats(props) {
                             <div className="messages-container">
                                 {activeChatId
                                     ?
-                                    <div className="scroll-block">
-                                        {/* {[{ message: "Дарова чумаход, как сам?", me: true, time: "19:14", id: 233 },
-                                        { message: "Ну привет чумаход, я норм", me: false, time: "19:16", id: 123 },
-                                        { message: "Прикол прикольный", me: true, time: "19:16", id: 3 },
-                                        { message: "Прикольный прикол", me: true, time: "19:16", id: 2 },
-                                        { message: "Да уж ну и диалог", me: false, time: "19:16", id: 24 },
-                                        { message: "Не ну а чО", me: true, time: "19:16", id: 25 },
-                                        { message: "Мне нравитсчя у!ра Гадасть конечно, но нераивтс конкретно!", me: true, time: "19:17", id: 45 }] */}
+                                    <Scrollbars style={{ width: "100%", height: "100%" }}
+                                        renderView={props => <div {...props} className="simplebar-content" />}
+                                    >
                                         {activeChat.messages.map((item, index) => {
                                             return <MessageCard key={index} item={item} />
                                         })}
-                                    </div>
+                                    </Scrollbars>
                                     : null}
                             </div>
                             {activeChatId ? <div className="input-container">
