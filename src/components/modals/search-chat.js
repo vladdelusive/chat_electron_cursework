@@ -30,14 +30,14 @@ function SearchChatModal(props) {
     return (
         <Modal
             visible={isShow}
-            title="Search chat with new person"
+            title="Начните чат с новым пользователем"
             onCancel={clodeModal}
         >
             <Row typeof="flex" justify="center" style={{ marginBottom: 10 }} >
                 <Col span={24}>
                     <Input
                         className="input"
-                        placeholder="input search text"
+                        placeholder="Поиск по имейл или имени..."
                         size="large"
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
@@ -57,7 +57,7 @@ function SearchChatModal(props) {
                             <Button
                                 size="small"
                                 onClick={() => createNewChat({ chatWithUserUid: item.uid, callback: clodeModal })}
-                            >Start chat</Button>
+                            >Начать чат</Button>
                         ]}
                     >
                         <Skeleton avatar title={false} loading={item.loading} active>

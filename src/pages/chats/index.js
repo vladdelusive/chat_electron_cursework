@@ -103,7 +103,7 @@ function Chats(props) {
         const scrollBlockContainer = document.querySelector(".simplebar-content")
         if (scrollBlockContainer) {
             scrollBlockContainer.scrollTo({
-                top: 2439,
+                top: scrollBlockContainer.scrollHeight,
             });
         }
     }, [activeChatId])
@@ -119,7 +119,7 @@ function Chats(props) {
                             </Tooltip>
                         </div>
                         <Search
-                            placeholder="Search chat..."
+                            placeholder="Найти чат..."
                             className="search-chats"
                             allowClear
                             value={searchValue}
@@ -203,7 +203,7 @@ function Chats(props) {
                                     <Col span={22}>
                                         <Input
                                             className="input"
-                                            placeholder="input search text"
+                                            placeholder={activeChat?.messages?.length ? "Напишите сообщение" : "Напишите сообщение первым"}
                                             size="large"
                                             onChange={(e) => setMessageValue(e.target.value)}
                                             value={messageValue}
