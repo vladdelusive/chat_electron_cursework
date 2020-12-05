@@ -28,7 +28,6 @@ export const authReducer = createReducer(initialState, {
     [auth.FAIL_LOGIN_BY_GOOGLE](state) {
         return {
             ...state,
-
         };
     },
 

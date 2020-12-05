@@ -10,9 +10,6 @@ import { push } from 'connected-react-router';
 import { routes } from 'routes';
 import { saveChats } from 'store/chats/actions';
 
-// const saveProfileToLocalStorage = (auth) => window.localStorage.setItem("auth", auth);
-// const removeProfileToLocalStorage = () => window.localStorage.removeItem("auth");
-
 function* fetchLogInByGoogleSaga() {
     try {
         const response = yield call(api.auth.googleLogin);

@@ -2,7 +2,6 @@ import { takeEvery } from 'redux-saga/effects';
 import * as notification from './types';
 
 function* changeStatusOnlineSaga() {
-
 }
 
 export function* notificationSaga() {
