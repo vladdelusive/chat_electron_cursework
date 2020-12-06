@@ -118,7 +118,7 @@ function Chats(props) {
                 <div className="chats-header">
                     <div className={`header-line ${isCollapsed ? "collapsed" : ""}`}>
                         <div className="search-chat-btn">
-                            <Tooltip title="Chat with new person">
+                            <Tooltip title="Чат с новым пользователем">
                                 <Button icon={<PlusOutlined />} size="large" onClick={() => setIsShowNewChatModal(true)} />
                             </Tooltip>
                         </div>

@@ -11,7 +11,7 @@ const View = ({ logInByGoogle }) => {
 				icon={<LoginOutlined />}
 				onClick={() => logInByGoogle()}
 			>
-				Sign In
+				Войти
 			</Button>
 		</Col>
 	);
