@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Button, Col, Input, Layout, Menu, Row, Tooltip, Typography, Avatar } from 'antd';
+import { Button, Col, Input, Layout, Menu, Row, Tooltip, Typography, Avatar, Upload } from 'antd';
 import
 Icon,
 {
-    PaperClipOutlined, PlusOutlined, UserOutlined,
+    PlusOutlined, UploadOutlined, UserOutlined,
 } from '@ant-design/icons';
 import { MessageCard } from 'components/cards/message'
 import { setActiveChatId, setUpdatedChatMessages, sendNewMessage } from 'store/chats/actions';
@@ -16,9 +16,13 @@ import { SearchChatModal } from 'components/modals';
 import { api } from 'services';
 import { Link } from 'react-router-dom';
 import { routes } from 'routes';
+import { checkValue } from 'utils/validation'
 
 import { Scrollbars } from 'react-custom-scrollbars';
+import { noty } from 'utils';
+import { generateUid } from 'utils/uid-generator';
 
+import { createStorageRef } from 'db'
 const { Content, Sider } = Layout;
 const { Search } = Input;
 const { Title } = Typography;
@@ -84,7 +88,7 @@ function Chats(props) {
             return;
         }
         if (e.key === "Enter") {
-            sendNewMessage({ chatUid: activeChatId, message: messageValue })
+            sendNewMessage({ chatUid: activeChatId, message: messageValue, isImage: false })
             setMessageValue("")
         }
     }
@@ -198,7 +202,36 @@ function Chats(props) {
                             {activeChatId ? <div className="input-container">
                                 <Row className="input-message" typeof="flex" justify="center" gutter={24} >
                                     <Col style={{ alignItems: "center", display: "flex", cursor: "pointer" }}>
-                                        <PaperClipOutlined style={{ fontSize: 30 }} />
+                                        <Upload
+                                            beforeUpload={() => false}
+                                            onChange={async (info) => {
+                                                const error = checkValue([info.file], {
+                                                    fileTypes: 'png, jpg, jpeg',
+                                                    fileSize: 8 * 1024
+                                                });
+                                                if (!error) {
+                                                    const fileNamePath = generateUid() + info.file.name;
+                                                    createStorageRef(info.file, fileNamePath).then((url) => {
+                                                        sendNewMessage({ chatUid: activeChatId, message: url, isImage: true })
+                                                    })
+                                                } else {
+                                                    noty('error', error);
+                                                }
+                                                // const storageRef = app.storage().ref();
+                                                // const fileRef = storageRef.child(file.name);
+                                                // await fileRef.put(file);
+                                                // setFileUrl(await fileRef.getDownloadURL());
+                                            }}
+                                            showUploadList={false}
+                                            multiple={true}
+                                        >
+                                            <Tooltip placement="topRight" title="Загрузить картинку">
+                                                <Button className="btn-upload">
+                                                    <UploadOutlined style={{ fontSize: 30 }} />
+                                                </Button>
+                                            </Tooltip>
+                                        </Upload>
+
                                     </Col>
                                     <Col span={22}>
                                         <Input
@@ -224,6 +257,7 @@ function Chats(props) {
                     <SearchChatModal setIsShowNewChatModal={setIsShowNewChatModal} />
                     : null
             }
+            {/* <UploadImage /> */}
         </>
     )
 }
