@@ -57,9 +57,9 @@ function* setUpdateChatMessageSaga(action) {
 function* sendMessageSaga(action) {
     try {
         const { payload } = action;
-        const { chatUid, message } = payload
+        const { chatUid, message, isImage } = payload;
         const profileUid = yield select(getAuthProfileUid)
-        const preparedNewMessage = parseNewMessage({ uid: profileUid, message })
+        const preparedNewMessage = parseNewMessage({ uid: profileUid, message, isImage })
         yield call(api.chats.sendMessage, { chatUid, message: preparedNewMessage })
     } catch (error) {
         console.log(error);

@@ -9,6 +9,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true,
+            nativeWindowOpen: true,
         },
     });
 
@@ -21,6 +22,7 @@ function createWindow() {
 
     // Open the DevTools.
     win.webContents.openDevTools();
+    win.webContents.userAgent = "Chrome"
 }
 
 // This method will be called when Electron has finished

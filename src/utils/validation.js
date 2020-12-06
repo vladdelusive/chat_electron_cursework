@@ -27,6 +27,36 @@ export const rulesHandler = {
             return 'The email format is invalid.';
         }
     },
+
+    fileSize: (value, max, /*fieldName*/) => {
+        let flag = true;
+        if (value && value.length) {
+            for (let i = 0; i < value.length; i++) {
+                if (value[i].size / 1024 > Number(max)) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        if (!flag) {
+            return `Объем файла не должен превышать ${max}kB`;
+        }
+    },
+
+    fileTypes: (value, types, /*fieldName*/) => {
+        let flag = true;
+        if (value && value.length) {
+            let exts = types.replace(/\s/g, '').replace(/,/g, '|');
+            for (let i = 0; i < value.length; i++) {
+                if (!new RegExp('.(' + exts + ')$', 'i').test(value[i].name)) {
+                    flag = false;
+                }
+            }
+        }
+        if (!flag) {
+            return `Допустимые расширения файлов: ${types}`;
+        }
+    },
 };
 
 export function checkValue(value, rules, fieldName) {
