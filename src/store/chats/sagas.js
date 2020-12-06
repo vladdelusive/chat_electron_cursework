@@ -5,6 +5,8 @@ import { saveChats, saveUsersForChat } from './actions';
 import { getAuthProfileUid } from 'store/auth/selectors';
 import { getChatsList } from './selectors';
 import { parseChatsList, parseNewMessage } from 'services/api/parse';
+import { noty } from 'utils';
+
 
 function* createNewChatSaga(action) {
     try {
@@ -48,7 +50,23 @@ function* setUpdateChatMessageSaga(action) {
             return chat
         })
         const userUid = yield select(getAuthProfileUid)
-        yield put(saveChats(parseChatsList(updatedChats, userUid)))
+        const parsedUpdatedChats = parseChatsList(updatedChats, userUid)
+
+        const updatedMessagesChatBefore = chats.find(e => e["id"] === chatUid)
+        const updatedMessagesChatAfter = parsedUpdatedChats.find(e => e["id"] === chatUid)
+        if (updatedMessagesChatBefore?.messages?.length < updatedMessagesChatAfter?.messages?.length) {
+            const newMessage = updatedMessagesChatAfter.messages[updatedMessagesChatAfter.messages.length - 1]
+            if (!newMessage.me) {
+                noty("success", (`${newMessage.isImage
+                    ? "Отправлена картинка"
+                    : `${newMessage.message.length > 20 ? `${newMessage.message.slice(0, 15)}...` : newMessage.message}`}`),
+                    (`Новое сообщение от ${updatedMessagesChatAfter.userInfo.name}`),
+                    { placement: "bottomRight" }
+                )
+            }
+        }
+
+        yield put(saveChats(parsedUpdatedChats))
     } catch (error) {
         console.log(error);
     }
