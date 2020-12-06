@@ -35,7 +35,7 @@ const routes = {
 			return this.path;
 		},
 		exact: true,
-		// isNeedAuth: true,
+		isNeedAuth: true,
 	},
 	'profiles': {
 		path: '/profile/:id',
@@ -44,7 +44,7 @@ const routes = {
 		link(id) {
 			return this.path.replace(":id", id);
 		},
-		// isNeedAuth: true,
+		isNeedAuth: true,
 	},
 	'not-found': {
 		path: "*",
