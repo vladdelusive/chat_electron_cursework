@@ -8,6 +8,7 @@ import { checkForm } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
 import { SignUpForm } from '.';
+import { noty } from 'utils';
 // import { loginRequest } from 'store/auth/actions'
 const { TabPane } = Tabs;
 
@@ -20,6 +21,7 @@ function LoginForm(props) {
 
     const logIn = (values) => {
         // loginRequest(values)
+        noty("info", "Данный функционал в разработке")
     }
 
     return <Tabs defaultActiveKey="1" type="card" size={"large"}>

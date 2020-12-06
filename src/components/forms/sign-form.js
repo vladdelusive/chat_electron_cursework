@@ -7,6 +7,7 @@ import { Field, reduxForm } from 'redux-form';
 import { checkForm } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
+import { noty } from 'utils';
 
 function SignUpForm(props) {
     const {
@@ -15,12 +16,14 @@ function SignUpForm(props) {
     } = props
 
     const logIn = (values) => {
-
+        noty("info", "Данный функционал в разработке")
     }
 
     const propsUpload = {
         name: 'file',
-        onChange(info) { },
+        onChange(info) {
+
+        },
     }
 
     return <Form onSubmitCapture={handleSubmit(logIn)}>
