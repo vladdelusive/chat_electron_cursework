@@ -10,7 +10,7 @@ export function MessageCard(props) {
         isImage,
     } = item;
     return (
-        <div className={`message ${me ? "from-me--message" : "to-me--message"}`} style={{ opacity: message?.length === 0 ? 0 : 1 }}>
+        <div className={`message ${me ? "from-me--message" : "to-me--message"}`} style={{ opacity: message?.length === 0 ? 0 : 1, maxWidth: isImage ? "40%" : "70%" }}>
             <div className="message__content">
                 {
                     isImage ?

@@ -54,7 +54,7 @@ export const ProfileCard = React.memo((props) => {
             {returnBtn ? <Row type={"flex"} justify="center">
                 <Col>
                     <Link to="/chats" >
-                        <Button icon={<DoubleLeftOutlined />} type="primary">Back</Button>
+                        <Button icon={<DoubleLeftOutlined />} type="primary">Назад</Button>
                     </Link>
                 </Col>
             </Row> : null}

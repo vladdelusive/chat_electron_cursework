@@ -1,96 +1,93 @@
 import React from 'react';
-import { Button, Col, Form, Row, Spin } from 'antd';
-import { CloseOutlined, EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Row, Spin, Tabs } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { checkForm } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
-import { loginRequest } from 'store/auth/actions'
+import { SignUpForm } from '.';
+// import { loginRequest } from 'store/auth/actions'
+const { TabPane } = Tabs;
 
 function LoginForm(props) {
     const {
         pending,
         handleSubmit,
-        loginRequest,
-        setShowModal,
+        // loginRequest,
     } = props
 
     const logIn = (values) => {
-        loginRequest(values)
+        // loginRequest(values)
     }
 
-    return <Form onSubmitCapture={handleSubmit(logIn)}>
-        <Spin spinning={pending}>
-            <div className={'form__body'}>
-                <Row>
-                    <Field
-                        component={AInput}
-                        prefix={<UserOutlined />}
-                        name={'email'}
-                        type={'text'}
-                        placeholder={'Email'}
-                        size="large"
-                        hint="Type any valid email"
-                    />
-                </Row>
-                <Row>
-                    <Field
-                        component={AInputPassword}
-                        prefix={<LockOutlined />}
-                        name={'password'}
-                        type={'password'}
-                        placeholder={'Password'}
-                        size="large"
-                        iconRender={visible => visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
-                        hint="Type any valid password"
-                    />
-                </Row>
-            </div>
-        </Spin>
+    return <Tabs defaultActiveKey="1" type="card" size={"large"}>
+        <TabPane tab="Авторизация" key="1">
+            <Form onSubmitCapture={handleSubmit(logIn)}>
+                <Spin spinning={false}>
+                    <div className={'form__body'}>
+                        <Row>
+                            <Field
+                                component={AInput}
+                                prefix={<UserOutlined />}
+                                name={'email'}
+                                type={'text'}
+                                placeholder={'Почта'}
+                                size="large"
+                                hint="Введите свою почту"
+                            />
+                        </Row>
+                        <Row>
+                            <Field
+                                component={AInputPassword}
+                                prefix={<LockOutlined />}
+                                name={'password'}
+                                type={'password'}
+                                placeholder={'Пароль'}
+                                size="large"
+                                iconRender={visible => visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                                hint="Введите корректный пароль"
+                            />
+                        </Row>
+                    </div>
+                </Spin>
 
-        <div className={'form__footer'}>
-            <Row gutter={6}>
-                <Col span={18}>
-                    <Button
-                        htmlType={'submit'}
-                        className={'control control--submit'}
-                        type={'primary'}
-                        size="large"
-                        style={{ width: "100%" }}
-                        loading={pending}
-                        onClick={() => setShowModal(false)}
-                    >
-                        Sign In
-                    </Button>
-                </Col>
-                <Col span={6}>
-                    <Button
-                        className={'control control--cancel'}
-                        type={'link'}
-                        size="large"
-                        icon={<CloseOutlined />}
-                        onClick={() => setShowModal(false)}
-                    >
-                        Cancel
-                    </Button>
-                </Col>
-            </Row>
-            <Row style={{ marginTop: 20 }} typeof="flex" justify="center">
-                <Col>
-                    <Button
-                        className={'control'}
-                        type={'text'}
-                        size="small"
-                        onClick={() => { }}
-                    >
-                        I don`t have an account
-                    </Button>
-                </Col>
-            </Row>
-        </div>
-    </Form>
+                <div className={'form__footer'}>
+                    <Row gutter={6}>
+                        <Col span={24}>
+                            <Button
+                                htmlType={'submit'}
+                                className={'control control--submit'}
+                                type={'primary'}
+                                size="large"
+                                style={{ width: "100%" }}
+                                loading={pending}
+                                onClick={() => { }}
+                            >
+                                Авторизоватся
+                            </Button>
+                        </Col>
+                    </Row>
+                    {/* <Row style={{ marginTop: 20 }} typeof="flex" justify="center">
+                        <Col>
+                            <Button
+                                className={'control'}
+                                type={'text'}
+                                size="small"
+                                onClick={() => { }}
+                            >
+                                I don`t have an account
+                            </Button>
+                        </Col>
+                    </Row> */}
+                </div>
+            </Form>
+        </TabPane>
+        <TabPane tab="Регистрация" key="2">
+            <SignUpForm />
+        </TabPane>
+    </Tabs>
 }
 
 const validate = (values) => {
@@ -105,7 +102,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = { loginRequest };
+const mapDispatchToProps = {};
 
 const EnhancedLoginForm = compose(
     connect(mapStateToProps, mapDispatchToProps),

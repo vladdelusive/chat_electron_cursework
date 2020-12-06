@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types,react/display-name,react/no-children-prop */
 import React from 'react';
-import { Form, Input } from 'antd';
+import { Form, Input, Upload } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -21,6 +21,24 @@ export const makeField = Component => props => {
 
     const showValidationFeedback = hasFeedback && (asyncValidating || hasError || meta.valid);
 
+    if (Object.is(Component, Upload)) {
+        extra.fileList = input.value || rest.defaultValue || [];
+        extra.beforeUpload = () => false;
+        extra.onChange = (info) => {
+            input.onChange(info.fileList);
+        };
+        return <FormItem
+            label={label}
+            validateStatus={asyncValidating ? 'validating' : hasError ? 'error' : 'success'}
+            hasFeedback={showValidationFeedback}
+            help={hasError && meta.error}
+            {...formItemLayout}
+            {...input}
+        >
+            <Component className={'control__component'} {...rest} {...extra} children={children} />
+        </FormItem>
+    }
+
     return (
         <FormItem
             label={label}
@@ -38,3 +56,4 @@ export const makeField = Component => props => {
 
 export const AInput = makeField(Input);
 export const AInputPassword = makeField(Input.Password);
+export const AInputUpload = makeField(Upload);

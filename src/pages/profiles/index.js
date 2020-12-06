@@ -26,7 +26,7 @@ function PageProfileContainer(props) {
             img={img}
             nameTitle={name}
             email={email}
-            title={"Contact View"}
+            title={"Контакт"}
             isDataExist={isDataExist}
             returnBtn={true}
         />

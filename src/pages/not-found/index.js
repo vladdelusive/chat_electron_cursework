@@ -10,7 +10,7 @@ export function NotFound() {
             subTitle="Requested page not found!"
             extra={
                 <Link to="/">
-                    <Button type="primary">Back Home</Button>
+                    <Button type="primary">Вернутся на главную</Button>
                 </Link>
             }
         />

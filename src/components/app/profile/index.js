@@ -26,9 +26,9 @@ function ProfileContainer(props) {
     const welcomeTitle = `${name}`
     const menu = (
         <Menu>
-            <Menu.Item key="0" onClick={() => push(routes.profile.link())} ><UserOutlined />Profile</Menu.Item>
+            <Menu.Item key="0" onClick={() => push(routes.profile.link())} ><UserOutlined />Профиль</Menu.Item>
             <Menu.Divider />
-            <Menu.Item key="1" onClick={onClickLogout}><LogoutOutlined />Logout</Menu.Item>
+            <Menu.Item key="1" onClick={onClickLogout}><LogoutOutlined />Выйти</Menu.Item>
         </Menu>
     )
     return (

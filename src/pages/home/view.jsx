@@ -2,7 +2,7 @@ import React from 'react';
 import ReactLogo from 'assets/images/react-logo.svg';
 import { Tag, Typography } from 'antd';
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 
 const View = () => {
 	return (
