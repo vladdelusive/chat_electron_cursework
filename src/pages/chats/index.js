@@ -21,6 +21,7 @@ import { checkValue } from 'utils/validation'
 import { Scrollbars } from 'react-custom-scrollbars';
 import { noty } from 'utils';
 import { generateUid } from 'utils/uid-generator';
+// import ChatBack from 'assets/images/chat-template.jpg';
 
 import { createStorageRef } from 'db'
 import Modal from 'antd/lib/modal/Modal';
@@ -205,66 +206,68 @@ function Chats(props) {
                     </Sider>
                     <Layout className="chat-content">
                         <Content>
-                            <div className="messages-container">
-                                {activeChatId
-                                    ?
-                                    <Scrollbars style={{ width: "100%", height: "100%" }}
-                                        renderView={props => <div {...props} className="simplebar-content" />}
-                                    >
-                                        {activeChat.messages.map((item, index) => {
-                                            return <MessageCard key={index} item={item} onShowImage={onShowImage} />
-                                        })}
-                                    </Scrollbars>
-                                    : null}
-                            </div>
-                            {activeChatId ? <div className="input-container">
-                                <Row className="input-message" typeof="flex" justify="center" gutter={24} >
-                                    <Col style={{ alignItems: "center", display: "flex", cursor: "pointer" }}>
-                                        <Upload
-                                            beforeUpload={() => false}
-                                            onChange={async (info) => {
-                                                const error = checkValue([info.file], {
-                                                    fileTypes: 'png, jpg, jpeg',
-                                                    fileSize: 8 * 1024
-                                                });
-                                                if (!error) {
-                                                    const fileNamePath = generateUid() + info.file.name;
-                                                    createStorageRef(info.file, fileNamePath).then((url) => {
-                                                        sendNewMessage({ chatUid: activeChatId, message: url, isImage: true })
-                                                    })
-                                                } else {
-                                                    noty('error', error);
-                                                }
-                                                // const storageRef = app.storage().ref();
-                                                // const fileRef = storageRef.child(file.name);
-                                                // await fileRef.put(file);
-                                                // setFileUrl(await fileRef.getDownloadURL());
-                                            }}
-                                            showUploadList={false}
-                                            multiple={true}
-                                        >
-                                            <Tooltip placement="topRight" title="Загрузить картинку">
-                                                <Button className="btn-upload">
-                                                    <UploadOutlined style={{ fontSize: 30 }} />
-                                                </Button>
-                                            </Tooltip>
-                                        </Upload>
+                            {
+                                activeChatId ?
+                                    <>
+                                        <div className="messages-container">
+                                            <Scrollbars style={{ width: "100%", height: "100%" }}
+                                                renderView={props => <div {...props} className="simplebar-content" />}
+                                            >
+                                                {activeChat.messages.map((item, index) => {
+                                                    return <MessageCard key={index} item={item} onShowImage={onShowImage} />
+                                                })}
+                                            </Scrollbars>
 
-                                    </Col>
-                                    <Col span={22}>
-                                        <Input
-                                            className="input"
-                                            placeholder={activeChat?.messages?.length ? "Напишите сообщение" : "Напишите сообщение первым"}
-                                            size="large"
-                                            onChange={(e) => setMessageValue(e.target.value)}
-                                            value={messageValue}
-                                            onKeyPress={submitMessage}
-                                        // suffix={suffix}
-                                        // onSearch={onSearch}
-                                        />
-                                    </Col>
-                                </Row>
-                            </div> : null}
+                                        </div>
+                                        <div className="input-container">
+                                            <Row className="input-message" typeof="flex" justify="center" gutter={24} >
+                                                <Col style={{ alignItems: "center", display: "flex", cursor: "pointer" }}>
+                                                    <Upload
+                                                        beforeUpload={() => false}
+                                                        onChange={async (info) => {
+                                                            const error = checkValue([info.file], {
+                                                                fileTypes: 'png, jpg, jpeg',
+                                                                fileSize: 8 * 1024
+                                                            });
+                                                            if (!error) {
+                                                                const fileNamePath = generateUid() + info.file.name;
+                                                                createStorageRef(info.file, fileNamePath).then((url) => {
+                                                                    sendNewMessage({ chatUid: activeChatId, message: url, isImage: true })
+                                                                })
+                                                            } else {
+                                                                noty('error', error);
+                                                            }
+                                                        }}
+                                                        showUploadList={false}
+                                                        multiple={true}
+                                                    >
+                                                        <Tooltip placement="topRight" title="Загрузить картинку">
+                                                            <Button className="btn-upload">
+                                                                <UploadOutlined style={{ fontSize: 30 }} />
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </Upload>
+
+                                                </Col>
+                                                <Col span={22}>
+                                                    <Input
+                                                        className="input"
+                                                        placeholder={activeChat?.messages?.length ? "Напишите сообщение" : "Напишите сообщение первым"}
+                                                        size="large"
+                                                        onChange={(e) => setMessageValue(e.target.value)}
+                                                        value={messageValue}
+                                                        onKeyPress={submitMessage}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </>
+                                    // : <img src={ChatBack} alt="back img" className="fit-template"></img>
+                                    : null
+                            }
+                            <>
+                            </>
+
                         </Content>
                     </Layout>
                 </Layout>
