@@ -23,6 +23,7 @@ import { noty } from 'utils';
 import { generateUid } from 'utils/uid-generator';
 
 import { createStorageRef } from 'db'
+import Modal from 'antd/lib/modal/Modal';
 const { Content, Sider } = Layout;
 const { Search } = Input;
 const { Title } = Typography;
@@ -46,7 +47,7 @@ function Chats(props) {
     const [searchValue, setSearchValue] = useState("")
     const [isShowNewChatModal, setIsShowNewChatModal] = useState(false)
     const [messageValue, setMessageValue] = useState("")
-
+    const [showImage, onShowImage] = useState({ show: false, src: null })
     useEffect(() => {
         setMessageValue("")
     }, [activeChatId])
@@ -94,22 +95,39 @@ function Chats(props) {
     }
 
     useEffect(() => {
+        let timeout;
         const scrollBlockContainer = document.querySelector(".simplebar-content")
         if (scrollBlockContainer) {
             scrollBlockContainer.scrollTo({
                 top: scrollBlockContainer.scrollHeight,
                 behavior: "smooth"
             });
+            timeout = setTimeout(() => {
+                scrollBlockContainer.scrollTo({
+                    top: scrollBlockContainer.scrollHeight,
+                    behavior: "smooth"
+                });
+            }, 500)
         }
+        return () => clearTimeout(timeout)
     }, [chats])
 
     useEffect(() => {
+        let timeout;
+
         const scrollBlockContainer = document.querySelector(".simplebar-content")
         if (scrollBlockContainer) {
             scrollBlockContainer.scrollTo({
                 top: scrollBlockContainer.scrollHeight,
             });
+            timeout = setTimeout(() => {
+                scrollBlockContainer.scrollTo({
+                    top: scrollBlockContainer.scrollHeight,
+                    behavior: "smooth"
+                });
+            }, 500)
         }
+        return () => clearTimeout(timeout)
     }, [activeChatId])
 
     return (
@@ -194,7 +212,7 @@ function Chats(props) {
                                         renderView={props => <div {...props} className="simplebar-content" />}
                                     >
                                         {activeChat.messages.map((item, index) => {
-                                            return <MessageCard key={index} item={item} />
+                                            return <MessageCard key={index} item={item} onShowImage={onShowImage} />
                                         })}
                                     </Scrollbars>
                                     : null}
@@ -257,6 +275,15 @@ function Chats(props) {
                     <SearchChatModal setIsShowNewChatModal={setIsShowNewChatModal} />
                     : null
             }
+            <Modal
+                visible={showImage.show}
+                title={"Просмотр картинки"}
+                footer={null}
+                width={800}
+                onCancel={() => onShowImage({ src: null, show: false })}
+            >
+                <img alt="Sent img" style={{ width: '100%' }} src={showImage.src} />
+            </Modal>
             {/* <UploadImage /> */}
         </>
     )

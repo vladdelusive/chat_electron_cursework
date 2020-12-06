@@ -1,7 +1,7 @@
 import React from 'react'
 
 export function MessageCard(props) {
-    const { item } = props;
+    const { item, onShowImage } = props;
     const {
         message,
         me,
@@ -14,7 +14,7 @@ export function MessageCard(props) {
             <div className="message__content">
                 {
                     isImage ?
-                        <img src={message} alt="message img" style={{ width: "100%", height: "100%" }}></img>
+                        <img src={message} alt="message img" style={{ width: "100%", height: "100%" }} onClick={() => onShowImage({ src: message, show: true })}></img>
                         : message
                 }
             </div>
