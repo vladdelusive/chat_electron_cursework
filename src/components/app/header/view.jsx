@@ -1,7 +1,7 @@
 import './style.scss';
 import React, { useState } from 'react';
 import { Button, Col, Modal } from 'antd';
-import { LoginOutlined } from '@ant-design/icons';
+import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import { LoginForm } from 'components/forms'
 
 const View = ({ logInByGoogle }) => {
@@ -21,10 +21,15 @@ const View = ({ logInByGoogle }) => {
 			<Modal
 				visible={showModal}
 				title={
-					<Button onClick={() => {
-						logInByGoogle()
-						setShowModal(false)
-					}} type="link">Зайти через Google</Button>}
+					<Button
+						style={{ display: "flex", alignItems: "center" }}
+						onClick={() => {
+							logInByGoogle()
+							setShowModal(false)
+						}}
+						icon={<GoogleOutlined style={{ color: "#00a7b7", fontSize: 24 }} />}
+						type="link"
+					>Зайти через Google</Button>}
 				onCancel={() => setShowModal(false)}
 				footer={false}
 			>

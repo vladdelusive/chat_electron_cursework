@@ -28,14 +28,11 @@
 
 .layout {
     .layout__header {
-        background: linear-gradient(
-            302deg,
-            rgb(93, 134, 232) 0%,
-            rgb(99, 205, 145) 13%,
-            rgb(157, 216, 255) 100%
-        ) !important;
+        background: linear-gradient(302deg, #fefeff 0%, #63cd91 13%, #ffffff 100%) !important;
+        min-height: 80px;
     }
     .layout__footer {
+        min-height: 70px;
         background: linear-gradient(
             302deg,
             rgb(156, 216, 253) 0%,
