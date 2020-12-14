@@ -4,7 +4,7 @@ import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UploadOutlined, UserOut
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { checkForm } from 'utils/validation';
+import { checkForm, checkValue } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
 import { noty } from 'utils';
@@ -27,7 +27,15 @@ function SignUpForm(props) {
             if (file.status === 'removed') {
                 return
             }
-            setFile([file]);
+            const error = checkValue([file], {
+                fileTypes: 'png, jpg, jpeg',
+                fileSize: 8 * 1024
+            });
+            if (!error) {
+                setFile([file]);
+            } else {
+                noty('error', error);
+            }
         },
         accept: "image/*",
         headers: { "content-type": "multipart/form-data" },
