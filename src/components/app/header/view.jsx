@@ -2,7 +2,7 @@ import './style.scss';
 import React, { useState } from 'react';
 import { Button, Col, Modal } from 'antd';
 import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
-import { LoginForm } from 'components/forms'
+import { AuthForm } from 'components/forms'
 
 const View = ({ logInByGoogle }) => {
 
@@ -33,7 +33,7 @@ const View = ({ logInByGoogle }) => {
 				onCancel={() => setShowModal(false)}
 				footer={false}
 			>
-				<LoginForm />
+				<AuthForm />
 			</Modal>
 		</>
 	);
