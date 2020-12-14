@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Form, Row, Spin, Upload } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { compose } from 'redux';
@@ -19,11 +19,25 @@ function SignUpForm(props) {
         noty("info", "Данный функционал в разработке")
     }
 
+    const [file, setFile] = useState([])
+
     const propsUpload = {
         name: 'file',
-        onChange(info) {
-
+        onChange({ file }) {
+            if (file.status === 'removed') {
+                return
+            }
+            setFile([file]);
         },
+        accept: "image/*",
+        headers: { "content-type": "multipart/form-data" },
+        showUploadList: true,
+        multiple: false,
+        beforeUpload: () => false,
+        fileList: file,
+        onRemove: () => {
+            setFile([])
+        }
     }
 
     return <Form onSubmitCapture={handleSubmit(logIn)}>
