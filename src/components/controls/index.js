@@ -25,18 +25,20 @@ export const makeField = Component => props => {
         extra.fileList = input.value || rest.defaultValue || [];
         extra.beforeUpload = () => false;
         extra.onChange = (info) => {
-            input.onChange(info.fileList);
+            input.onChange(info);
         };
-        return <FormItem
-            label={label}
-            validateStatus={asyncValidating ? 'validating' : hasError ? 'error' : 'success'}
-            hasFeedback={showValidationFeedback}
-            help={hasError && meta.error}
-            {...formItemLayout}
-            {...input}
-        >
-            <Component className={'control__component'} {...rest} {...extra} children={children} />
-        </FormItem>
+        return (
+            <FormItem
+                label={label}
+                validateStatus={asyncValidating ? 'validating' : hasError ? 'error' : 'success'}
+                hasFeedback={showValidationFeedback}
+                help={hasError && meta.error}
+                {...formItemLayout}
+                {...input}
+            >
+                <Component className={'control__component'} {...rest} {...extra} children={children} />
+            </FormItem>
+        )
     }
 
     return (

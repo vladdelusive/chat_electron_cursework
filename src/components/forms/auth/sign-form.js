@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Row, Spin, Upload } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Row, Spin, Upload, message } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, SmileOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
@@ -8,18 +8,28 @@ import { checkForm, checkValue } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
 import { noty } from 'utils';
+import { fetchRegisterByMailAndPassword } from 'store/auth/actions';
 
 function SignUpForm(props) {
     const {
         pending,
         handleSubmit,
+        fetchRegisterByMailAndPassword,
     } = props
 
-    const logIn = (values) => {
-        noty("info", "Данный функционал в разработке")
-    }
-
     const [file, setFile] = useState([])
+
+    const logIn = (values) => {
+        if (!file.length) {
+            message.error(`Загрузите картинку для аватарки`);
+        } else {
+            const valuesData = {
+                ...values,
+                photo: file[0],
+            }
+            fetchRegisterByMailAndPassword(valuesData)
+        }
+    }
 
     const propsUpload = {
         name: 'file',
@@ -51,6 +61,17 @@ function SignUpForm(props) {
     return <Form onSubmitCapture={handleSubmit(logIn)}>
         <Spin spinning={false}>
             <div className={'form__body'}>
+                <Row>
+                    <Field
+                        component={AInput}
+                        prefix={<SmileOutlined />}
+                        name={'name'}
+                        type={'text'}
+                        placeholder={'Имя/никнейм'}
+                        size="large"
+                        hint="Введите свое имя или никнейм"
+                    />
+                </Row>
                 <Row>
                     <Field
                         component={AInput}
@@ -92,7 +113,6 @@ function SignUpForm(props) {
                         size="large"
                         style={{ width: "100%" }}
                         loading={pending}
-                        onClick={() => { }}
                     >
                         Зарегистрироваться
                     </Button>
@@ -106,6 +126,7 @@ const validate = (values) => {
     return checkForm(values, {
         'email': { required: true, email: true },
         'password': { required: true, minLength: 8 },
+        'name': { required: true, minLength: 2 },
     });
 };
 
@@ -115,7 +136,9 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    fetchRegisterByMailAndPassword,
+};
 
 const EnhancedSignUpForm = compose(
     connect(mapStateToProps, mapDispatchToProps),

@@ -65,14 +65,18 @@ export const auth = {
 			}
 			return null
 		});
+	},
+
+	registerByMailAndPassword: async (payload) => {
+		const { email, password, image } = payload;
+		try {
+			const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
+			return user
+		} catch (error) {
+			if (error.message) {
+				noty('error', error.message);
+			}
+			return Promise.reject()
+		}
 	}
-	// register: async (payload) => {
-	// 	const { email, password } = payload;
-	// 	try {
-	// 		const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-	// 		return user
-	// 	} catch (error) {
-	// 		return Promise.reject()
-	// 	}
-	// }
 };

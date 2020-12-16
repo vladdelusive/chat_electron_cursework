@@ -5,7 +5,6 @@ import { GoogleOutlined, LoginOutlined } from '@ant-design/icons';
 import { AuthForm } from 'components/forms'
 
 const View = ({ logInByGoogle }) => {
-
 	const [showModal, setShowModal] = useState()
 	return (
 		<>
@@ -14,6 +13,7 @@ const View = ({ logInByGoogle }) => {
 					type={'link'}
 					icon={<LoginOutlined />}
 					onClick={() => setShowModal(true)}
+					style={{ fontSize: 16 }}
 				>
 					Войти
 			</Button>

@@ -30,6 +30,9 @@
     .layout__header {
         background: linear-gradient(302deg, #fefeff 0%, #63cd91 13%, #ffffff 100%) !important;
         min-height: 80px;
+        .header {
+            font-size: 16px;
+        }
     }
     .layout__footer {
         min-height: 70px;
