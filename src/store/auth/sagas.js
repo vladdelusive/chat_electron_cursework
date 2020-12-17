@@ -4,6 +4,7 @@ import {
     saveLogInByGoogle,
     failLogInByGoogle,
     saveUpdateProfile,
+    saveRegisterByMailAndPassword,
 } from './actions';
 import { api } from 'services';
 import { push } from 'connected-react-router';
@@ -37,6 +38,23 @@ function* setUpdateProfileAndChatsSaga(action) {
     }
 }
 
+function* registerByMailAndPasswordSaga(action) {
+    try {
+        const { payload } = action;
+        const response = yield call(api.auth.registerByMailAndPassword, payload);
+        if (!response) return;
+
+        const { chats } = response;
+        yield put(saveRegisterByMailAndPassword(response))
+        yield put(saveChats(chats))
+
+        yield put(push(routes.profile.link()))
+    } catch (error) {
+        console.log(error);
+        yield put(failLogInByGoogle());
+    }
+}
+
 function* clearAuthSaga() {
     // yield removeProfileToLocalStorage();
 }
@@ -44,5 +62,8 @@ function* clearAuthSaga() {
 export function* authSaga() {
     yield takeEvery(auth.FETCH_LOGIN_BY_GOOGLE, fetchLogInByGoogleSaga);
     yield takeEvery(auth.SET_UPDATE_PROFILE, setUpdateProfileAndChatsSaga);
+
+    yield takeEvery(auth.FETCH_REGISTER_BY_MAIL_AND_PASSWORD, registerByMailAndPasswordSaga);
+
     yield takeEvery(auth.CLEAR_AUTH, clearAuthSaga);
 }

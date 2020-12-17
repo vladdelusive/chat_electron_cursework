@@ -9,3 +9,6 @@ export const clearAuth = (payload) => ({ type: auth.CLEAR_AUTH, payload });
 
 export const setUpdateProfile = (payload) => ({ type: auth.SET_UPDATE_PROFILE, payload });
 export const saveUpdateProfile = (payload) => ({ type: auth.SAVE_UPDATE_PROFILE, payload });
+
+export const fetchRegisterByMailAndPassword = (payload) => ({ type: auth.FETCH_REGISTER_BY_MAIL_AND_PASSWORD, payload });
+export const saveRegisterByMailAndPassword = (payload) => ({ type: auth.SAVE_REGISTER_BY_MAIL_AND_PASSWORD, payload });
