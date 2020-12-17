@@ -12,3 +12,6 @@ export const saveUpdateProfile = (payload) => ({ type: auth.SAVE_UPDATE_PROFILE,
 
 export const fetchRegisterByMailAndPassword = (payload) => ({ type: auth.FETCH_REGISTER_BY_MAIL_AND_PASSWORD, payload });
 export const saveRegisterByMailAndPassword = (payload) => ({ type: auth.SAVE_REGISTER_BY_MAIL_AND_PASSWORD, payload });
+
+export const fetchLogInByMailAndPassword = (payload) => ({ type: auth.FETCH_LOGIN_BY_MAIL_AND_PASSWORD, payload });
+export const saveLogInByMailAndPassword = (payload) => ({ type: auth.SAVE_LOGIN_BY_MAIL_AND_PASSWORD, payload });
