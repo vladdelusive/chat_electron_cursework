@@ -16,7 +16,6 @@ export const { Timestamp } = firebase.firestore
 
 export const db = firebase.initializeApp(config).firestore();
 
-
 export const createStorageRef = async (file, fileName, callback) => {
     const fullPath = 'photos/' + fileName;
     const storageRef = firebase.storage().ref(fullPath)

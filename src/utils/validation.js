@@ -4,27 +4,27 @@ function isEmail(email) {
 }
 
 export const rulesHandler = {
-    required: (value, rule, fieldName = "") => {
+    required: (value, rule, /*fieldName*/) => {
         if (rule === true && ['', undefined, null].some(v => v === value)) {
-            return `The ${fieldName} field is required.`;
+            return `Поле обязательное`;
         }
     },
 
-    minLength: (value, length, fieldName) => {
+    minLength: (value, length, /*fieldName*/) => {
         if (value && value.length < length) {
-            return `The ${fieldName} must be at least ${length} characters.`;
+            return `Должен быть как минимум ${length} символов.`;
         }
     },
 
-    maxLength: (value, length, fieldName) => {
+    maxLength: (value, length, /*fieldName*/) => {
         if (value && value.length > length) {
-            return `The ${fieldName} must be at max ${length} characters.`;
+            return `Должен быть как максимум ${length} символов.`;
         }
     },
 
     email: (value, rule) => {
         if (rule === true && !isEmail(String(value))) {
-            return 'The email format is invalid.';
+            return 'Имейл не валидный';
         }
     },
 
