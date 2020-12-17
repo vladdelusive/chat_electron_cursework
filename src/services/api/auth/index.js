@@ -1,10 +1,11 @@
 // import { http } from 'services';
 // import { parseContactsList } from '../parse';
-import { db } from 'db'
+import { createStorageRef, db } from 'db'
 import firebase from 'firebase'
 import 'firebase'
 import { noty } from 'utils/noty'
 import { parseChatsList } from '../parse'
+import { generateUid } from 'utils/uid-generator'
 
 const createUserProfile = (profile) => db.collection("profiles").doc(profile.uid).set(profile)
 
@@ -68,10 +69,20 @@ export const auth = {
 	},
 
 	registerByMailAndPassword: async (payload) => {
-		const { email, password, image } = payload;
+		const { email, password, photo, name } = payload;
 		try {
 			const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-			return user
+			const fileNamePath = generateUid() + photo.name;
+			const photoUrl = await createStorageRef(photo, fileNamePath);
+			const profile = {
+				name,
+				email,
+				photo: photoUrl,
+				uid: user.uid,
+				chats: []
+			}
+			createUserProfile(profile)
+			return profile
 		} catch (error) {
 			if (error.message) {
 				noty('error', error.message);
