@@ -7,22 +7,17 @@ import { Field, reduxForm } from 'redux-form';
 import { checkForm } from 'utils/validation';
 import { AInput } from 'components';
 import { AInputPassword } from 'components/controls';
-import { noty } from 'utils';
+import { fetchLogInByMailAndPassword } from 'store/auth/actions';
 
 function LoginForm(props) {
     const {
         pending,
         handleSubmit,
-        // loginRequest,
+        fetchLogInByMailAndPassword,
     } = props
 
-    const logIn = (values) => {
-        // loginRequest(values)
-        noty("info", "Данный функционал в разработке")
-    }
-
     return (
-        <Form onSubmitCapture={handleSubmit(logIn)}>
+        <Form onSubmitCapture={handleSubmit(fetchLogInByMailAndPassword)}>
             <Spin spinning={false}>
                 <div className={'form__body'}>
                     <Row>
@@ -95,7 +90,9 @@ const mapStateToProps = (state) => {
     return {}
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    fetchLogInByMailAndPassword,
+};
 
 const EnhancedLoginForm = compose(
     connect(mapStateToProps, mapDispatchToProps),
