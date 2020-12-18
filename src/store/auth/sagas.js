@@ -2,7 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import * as auth from './types';
 import {
     saveLogInAuth,
-    failLogInByGoogle,
+    failLogInAuth,
     saveUpdateProfile,
 } from './actions';
 import { api } from 'services';
@@ -21,7 +21,7 @@ function* fetchLogInByGoogleSaga() {
         yield put(push(routes.profile.link()))
     } catch (error) {
         console.log(error);
-        yield put(failLogInByGoogle());
+        yield put(failLogInAuth());
     }
 }
 
@@ -50,7 +50,7 @@ function* registerByMailAndPasswordSaga(action) {
         yield put(push(routes.profile.link()))
     } catch (error) {
         console.log(error);
-        yield put(failLogInByGoogle());
+        yield put(failLogInAuth());
     }
 }
 

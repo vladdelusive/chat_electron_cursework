@@ -1,7 +1,7 @@
 const PRFX = '@auth/';
 
 export const FETCH_LOGIN_BY_GOOGLE = `${PRFX}FETCH_LOGIN_BY_GOOGLE`;
-export const FAIL_LOGIN_BY_GOOGLE = `${PRFX}FAIL_LOGIN_BY_GOOGLE`;
+export const FAIL_LOGIN_AUTH = `${PRFX}FAIL_LOGIN_AUTH`;
 
 export const LOGOUT_REQUEST = `${PRFX}LOGOUT_REQUEST`;
 
