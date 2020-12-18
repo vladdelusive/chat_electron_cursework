@@ -1,10 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import * as auth from './types';
 import {
-    saveLogInByGoogle,
+    saveLogInAuth,
     failLogInByGoogle,
     saveUpdateProfile,
-    saveRegisterByMailAndPassword,
 } from './actions';
 import { api } from 'services';
 import { push } from 'connected-react-router';
@@ -16,7 +15,7 @@ function* fetchLogInByGoogleSaga() {
         const response = yield call(api.auth.googleLogin);
         if (!response) return;
         const { chats, profile } = response;
-        yield put(saveLogInByGoogle(profile))
+        yield put(saveLogInAuth(profile))
         yield put(saveChats(chats))
 
         yield put(push(routes.profile.link()))
@@ -45,7 +44,7 @@ function* registerByMailAndPasswordSaga(action) {
         if (!response) return;
 
         const { chats } = response;
-        yield put(saveRegisterByMailAndPassword(response))
+        yield put(saveLogInAuth(response))
         yield put(saveChats(chats))
 
         yield put(push(routes.profile.link()))

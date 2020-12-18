@@ -8,16 +8,7 @@ const initialState = {
 };
 
 export const authReducer = createReducer(initialState, {
-    [auth.SAVE_LOGIN_BY_GOOGLE](state, action) {
-        const { payload } = action;
-        return {
-            ...state,
-            isAuthenticated: true,
-            profile: payload,
-        };
-    },
-
-    [auth.SAVE_REGISTER_BY_MAIL_AND_PASSWORD](state, action) {
+    [auth.SAVE_LOGIN_AUTH](state, action) {
         const { payload } = action;
         return {
             ...state,
