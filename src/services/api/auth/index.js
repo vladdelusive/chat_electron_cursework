@@ -26,22 +26,26 @@ export const auth = {
 	},
 
 	preparedUpdatedProfileData: async (profile) => {
-		const chatsWithRefs = await Promise.all(profile.chats.map(chatUid => db.doc(`chats/${chatUid}`).get()))
-		const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
+		try {
+			const chatsWithRefs = await Promise.all(profile.chats.map(chatUid => db.doc(`chats/${chatUid}`).get()))
+			const chats = await Promise.all(chatsWithRefs.map(e => e.data()))
 
-		const usersInfoRefs = await Promise.all(chats.map(({ users }) => {
-			const chatWithPersonUid = users.find(userUid => profile.uid !== userUid)
-			return db.doc(`profiles/${chatWithPersonUid}`).get()
-		}))
-		const usersInfo = await Promise.all(usersInfoRefs.map(e => e.data()))
+			const usersInfoRefs = await Promise.all(chats.map(({ users }) => {
+				const chatWithPersonUid = users.find(userUid => profile.uid !== userUid)
+				return db.doc(`profiles/${chatWithPersonUid}`).get()
+			}))
+			const usersInfo = await Promise.all(usersInfoRefs.map(e => e.data()))
 
-		const preparedChats = chats.reduce((acc, chat, index) => {
-			const userValues = usersInfo[index];
-			const chatId = profile.chats[index];
-			return [...acc, { userInfo: { name: userValues.name, photo: userValues.photo, email: userValues.email, uid: userValues.uid }, id: chatId, ...chat }]
-		}, [])
+			const preparedChats = chats.reduce((acc, chat, index) => {
+				const userValues = usersInfo[index];
+				const chatId = profile.chats[index];
+				return [...acc, { userInfo: { name: userValues.name, photo: userValues.photo, email: userValues.email, uid: userValues.uid }, id: chatId, ...chat }]
+			}, [])
 
-		return { profile: profile, chats: parseChatsList(preparedChats, profile.uid) }
+			return { profile: profile, chats: parseChatsList(preparedChats, profile.uid) }
+		} catch (e) {
+			return Promise.reject()
+		}
 	},
 
 	googleLogin: () => {
@@ -83,6 +87,21 @@ export const auth = {
 			}
 			createUserProfile(profile)
 			return profile
+		} catch (error) {
+			if (error.message) {
+				noty('error', error.message);
+			}
+			return Promise.reject()
+		}
+	},
+
+	logInByMailAndPassword: async (payload) => {
+		const { email, password } = payload
+		try {
+			const { user: { uid } } = await firebase.auth().signInWithEmailAndPassword(email, password);
+			const existedProfile = (await db.doc(`profiles/${uid}`).get()).data()
+			const data = await auth.preparedUpdatedProfileData(existedProfile)
+			return data
 		} catch (error) {
 			if (error.message) {
 				noty('error', error.message);
